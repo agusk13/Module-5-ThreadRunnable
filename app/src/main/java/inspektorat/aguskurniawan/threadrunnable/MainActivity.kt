@@ -20,20 +20,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.button.setOnClickListener {
-            val runnable = Worker()
-            val thread = Thread(runnable)
-            thread.start()
-        }
-    }
-
-    inner class Worker : Runnable {
-        override fun run() {
-            killSomeTime()
+            Thread {
+                killSomeTime()
+            }.start()
         }
     }
 
     private fun killSomeTime() {
         for (i in 1..20) {
+            runOnUiThread {
+                binding.textView.text = i.toString()
+            }
             Thread.sleep(2000)
             println("i: $i")
         }
